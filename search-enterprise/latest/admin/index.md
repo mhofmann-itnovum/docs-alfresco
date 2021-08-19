@@ -2,6 +2,11 @@
 title: Overview
 ---
 
+**Administration Features**
+
+* Administration console to manage the key interactions between Alfresco and Elasticsearch from Alfresco Repository
+* Ability to determine the high-level health of the Elastic Search index via the administration console
+
 ## Indexing
 
 ### Pre-Indexing considerations
@@ -190,14 +195,17 @@ Recommendations:
 * Increase resources for the server if CPU load or memory consumption is high.
 * Increase resources for the server if ingestion rate is decreasing with higher volumes of data.
 
+<!--
 ## Permissions indexing performance
 
 ### Alfresco Repository
 
 Recommendations:
 
+
 * Concurrent multiple updates on the same node can lead to missed information on elasticsearch. [SEARCH-2772](https://alfresco.atlassian.net/browse/SEARCH-2772)
 * Updating permissions on folder containing a high number of nodes may cause that the permissions of descendants are not correctly updated on elasticsearch. [SEARCH-2768](https://alfresco.atlassian.net/browse/SEARCH-2768)
+-->
 
 ## Content indexing performance
 
@@ -237,7 +245,6 @@ spring.datasource.url=jdbc:postgresql://<READ_REPLICA_ADDRESS>:<READ_REPLICA_POR
 When it is required to index a huge Alfresco Repository instance, using a single reindex process can require much time. We can scale the reindex node vertically in order to improve performance, but this cannot be enough. Using [remote partitioning](https://docs.spring.io/spring-batch/docs/current/reference/html/scalability.html#partitioning), a Spring Batch feature, we can scale horizontally the Reindexing service.
 
 
-
  ┌─────────────────────────┐                             ┌────────────────┐
  │         Manager         │                             │    Worker 1    │
  │                         │   Produce     ┌────────────►│                ├───┐
@@ -261,10 +268,10 @@ When it is required to index a huge Alfresco Repository instance, using a single
              │           ┌────────────┐                           │           │
              │           │ Shared     │◄──────────────────────────┘           │
              └──────────►│ Database   │                                       │
-                         │            │◄──────────────────────────────────────┘           
+                         │            │◄──────────────────────────────────────┘
                          └────────────┘
 
-This solution requires a **manager** node that executes verification steps, like database schema validation, and creates partitions and multiple **worker** nodes that index the partition. The **manager** sends partitions to Worker using ActiveMQ. 
+This solution requires a **manager** node that executes verification steps, like database schema validation, and creates partitions and multiple **worker** nodes that index the partition. The **manager** sends partitions to Worker using ActiveMQ.
 
 To use this feature we need to run a **manager*+ node and at least a **worker** node, to scale up the system we can increase the number of worker nodes setting the property _alfresco.reindex.partitioning.grid-size_. The number of worker nodes, usually, should be equals to the grid size, but if it is more a worker will consume multiple partitions.
 
@@ -392,7 +399,41 @@ mediation:
 Once the file is available, use the parameter `alfresco.mediation.filter-file` to apply the configuration. It's also recommended to disable the checking of content media types cache.
 
 ```shell
-java -jar alfresco-elasticsearch-reindexing-3.0.0-SNAPSHOT-app.jar \
+java -jar alfresco-elasticsearch-reindexing-3.0.0-app.jar \
     --alfresco.mediation.filter-file=file:mediation-filter.json \
     --alfresco.accepted-content-media-types-cache.enabled=false
 ```
+
+## Unsupported Administrator
+
+### Index and re-index
+
+* Indexing of nodes created during content repository bootstrap. For example, the sample site data.
+* Re-index of permissions and content associated with indexed nodes.
+
+### Tools & Components
+
+* Alfresco Search and Insight Engine
+* Alfresco Governance Services
+* Alfresco Federation Services
+* Alfresco Intelligence Services
+* Alfresco Content Connector for AWS Glacier
+* Alfresco Content Connector for Salesforce
+* Alfresco Content Connector for SAP applications
+* Alfresco Collaboration Connector for Microsoft 365
+* Alfresco Outlook Integration
+* Alfresco Office Services
+* Alfresco Google Docs Integration
+* Alfresco Enterprise Viewer
+* Alfresco Content Accelerator
+
+### Unsupported data types and properties
+
+* http&#65279;://www.alfresco.org/model/cmis/1.0/cs01}id
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}any
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}assocref
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}category
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}childassocref
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}locale
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}noderef
+* http&#65279;://www.alfresco.org/model/dictionary/1.0}qname
