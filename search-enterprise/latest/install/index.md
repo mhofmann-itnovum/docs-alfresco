@@ -24,7 +24,7 @@ Alfresco Repository and Search Enterprise support communication with Elasticsear
 
 ## Alfresco Elasticsearch connector 3.0
 
-To install the Elastic Search Connector you can use JAR files, and deploy using Docker images that are packaged in Helm charts or with Docker Compose,
+To install the Elastic Search Connector you can use JAR files, and deploy using Docker images that are packaged in Helm charts or with Docker Compose.
 
 > **Note:** Kubernetes deployment is not supported.
 
@@ -49,15 +49,13 @@ elasticsearch.baseUrl=/
 
 These configuration properties are used by Alfresco Content Services to talk to Elasticsearch. In the sample above, a plain HTTP connection is configured, but Alfresco Repository also supports communication with Elasticsearch server using Basic Authentication and HTTPs protocol. Details to enable these options are described in the [Configuration]({% link search-services/latest/config/index.md %}) section.
 
-If using theIn order to set the configuration properties from the [Repository Admin Web Console](https://docs.alfresco.com/content-services/latest/admin/admin-console/) just choose `Repository Services > Search Service` option and set the properties in that web page.
+If using the [Repository Admin Web Console](https://docs.alfresco.com/content-services/latest/admin/admin-console/) select the `Repository Services > Search Service` option and set the properties from that web page.
 
 ![console]({% link search-enterprise/images/alfresco_repo_web_console.png %})
 
 ## Obtaining the Alfresco Elasticsearch Connector JAR applications
 
-Browse to [Alfresco Nexus Internal Group Repositories](https://nexus.alfresco.com/nexus/#view-repositories;internal~browsestorage){:target="_blank"} and download:
-
-FOR EXAMPLE You can download the [alfresco-extension-inspector-1.0.0.jar](https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/extension-inspector/alfresco-extension-inspector/1.0.0/alfresco-extension-inspector-1.0.0.jar) file from the Alfresco Nexus repository.
+Browse to [Alfresco Nexus Internal Group Repositories](https://nexus.alfresco.com/nexus/#view-repositories;internal~browsestorage){:target="_blank"} and download [alfresco-extension-inspector-1.0.0.jar](https://artifacts.alfresco.com/nexus/service/local/repositories/releases/content/org/alfresco/extension-inspector/alfresco-extension-inspector/1.0.0/alfresco-extension-inspector-1.0.0.jar).
 
 * `alfresco-elasticsearch-live-indexing-3.0.0-app.jar` file from `org/alfresco/alfresco-elasticsearch-live-indexing` folder
 
@@ -67,10 +65,10 @@ FOR EXAMPLE You can download the [alfresco-extension-inspector-1.0.0.jar](https:
 
 Verify that all the required services are available:
 
-* Elasticsearch, by default living in http://elasticsearch:9200
-* Alfresco ActiveMQ, as part of ACS 7.1 deployment, by default living in `nio://activemq:61616`
-* Alfresco Shared FileStore endpoint, as part of ACS 7.1 deployment, by default living in http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file/
-* Alfresco Database using PostgresSQL engine, as part of ACS 7.1 deployment, by default living in `localhost:5432`
+* Elasticsearch, by default at http://elasticsearch:9200
+* Alfresco ActiveMQ, as part of ACS 7.1 deployment, by default at `nio://activemq:61616`
+* Alfresco Shared FileStore endpoint, as part of ACS 7.1 deployment, by default at http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file/
+* Alfresco Database using PostgresSQL engine, as part of ACS 7.1 deployment, by default at `localhost:5432`
 
 ## Alfresco Re-Indexing app
 
@@ -80,7 +78,7 @@ Before running this application, it's required to get a JSON mapping of namespac
 
 [Alfresco Model Namespace-Prefix Mapping](https://github.com/AlfrescoLabs/model-ns-prefix-mapping){:target="_blank"}
 
-Copy the [JAR deployment](https://github.com/AlfrescoLabs/model-ns-prefix-mapping/releases/download/1.0.0/model-ns-prefix-mapping-1.0.0.jar){:target="_blank"} file for this module from to your local Alfresco Repository deployment. You can find instructions on how to deploy a Simple JAR Alfresco Repository module in [Simple Module (JAR)](https://docs.alfresco.com/content-services/2.0/develop/extension-packaging/#simplemodule){:target="_blank"}.
+Copy the [JAR deployment](https://github.com/AlfrescoLabs/model-ns-prefix-mapping/releases/download/1.0.0/model-ns-prefix-mapping-1.0.0.jar){:target="_blank"} file for this module to your local Alfresco Repository deployment. You can find instructions on how to deploy a Simple JAR Alfresco Repository module in [Simple Module (JAR)](https://docs.alfresco.com/content-services/2.0/develop/extension-packaging/#simplemodule){:target="_blank"}.
 
 Once this module is installed, JSON mapping file can be obtained using following URL:
 
@@ -117,7 +115,7 @@ Simplified response:
 
 Save this content in a new file named `reindex.prefixes-file.json`.
 
-Re-indexing application can be run from command line, passing the already generated JSON file and details for DB and Elasticsearch servers. Since this application is providing default values for Alfresco Repository Database username and password, it's strongly recommended to set this credentials by using the command line. By using this approach, database credentials won't be stored in server filesystem persistently.
+Re-indexing application can be run from command line, passing the already generated JSON file and details for DB and Elasticsearch servers. Since this application is providing default values for Alfresco Repository Database username and password, it's strongly recommended to set these credentials using the command line. By using this approach, database credentials won't be stored on the server filesystem persistently.
 
 ```java
 java -jar alfresco-elasticsearch-reindexing-3.0.0-app.jar \
@@ -132,19 +130,19 @@ o.a.r.w.ElasticsearchRepoEventItemWriter : Total indexed documents:: 845
 o.a.r.listeners.JobLifecycleListener     : Current Status: COMPLETED
 ```
 
-Once the program has being executed, existing Alfresco Repository nodes will be available in Elasticsearch.
+Once the program has been executed, existing Alfresco Repository nodes will be available in Elasticsearch.
 
 > **Note:** Additional use cases for this application will be covered in the [Indexing](Indexing) section.
 
 ## Alfresco Live Indexing app
 
-Alfresco Elasticsearch Connector *Live Indexing* can be started from command line as a standard Spring Boot application.
+Alfresco Elasticsearch Connector *Live Indexing* can be started from the command line as a standard Spring Boot application.
 
 ```java
 java -jar alfresco-elasticsearch-live-indexing-3.0.0-app.jar
 ```
 
-If your services are deployed on a different server or port, following parameters can be used.
+If your services are deployed on a different server or port, the following parameters can be used.
 
 ```java
 java -DSPRING_ELASTICSEARCH_REST_URIS=http://localhost:9200 \
@@ -153,7 +151,7 @@ java -DSPRING_ELASTICSEARCH_REST_URIS=http://localhost:9200 \
  -jar alfresco-elasticsearch-live-indexing-3.0.0-app.jar
 ```
 
-Additional memory may be assigned to thes services using default JVM options. For instance, the next command will start Alfresco Elasticsearch Connector with 2 GB of RAM.
+Additional memory may be assigned to these services using default JVM options. For instance, the next command will start Alfresco Elasticsearch Connector with 2 GB of RAM.
 
 ```java
 java -Xmx2G -jar alfresco-elasticsearch-live-indexing-3.0.0-app.jar
@@ -306,4 +304,4 @@ live-indexing:
         ALFRESCO_SHAREDFILESTORE_BASEURL: http://shared-file-store:8099/alfresco/api/-default-/private/sfs/versions/1/file/
 ```
 
-> **Note:** If Elasticsearch server is available on your environment, `elasticsearch` and `kibana` services can be removed from the `docker-compose.yml` provided file. You may adjust the references to `elasticsearch` service in Docker Compose in order to use your Elasticsearch deployment.
+> **Note:** If Elasticsearch server is available on your environment, `elasticsearch` and `kibana` services can be removed from the `docker-compose.yml` file. You may adjust the references to `elasticsearch` service in Docker Compose in order to use your Elasticsearch deployment.
