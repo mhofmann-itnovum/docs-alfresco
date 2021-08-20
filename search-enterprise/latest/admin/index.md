@@ -21,7 +21,7 @@ The Exact term search feature is disabled by default to save index space. It's p
 
 * *Live Indexing*: Metadata, Content and Permissions from Alfresco Repository are consumed using ActiveMQ messages so they can be indexed in the Elasticsearch server. The information created and updated in Alfresco Repository is not immediately available in Elasticsearch, as it takes some time to process the messages coming from the Repository. The previous [Eventual consistency]({% link search-services/latest/install/index.md %}#eventual-consistency) approach, based on transactions and used for Solr deployments, has been replaced by this new approach based on ActiveMQ messages.
 
-* *Reindexing*: Indexing the information of a pre-populated Alfresco Repository or catching up with Alfresco Repositories that have missed some ActiveMQ messages is provided by the Reindexing component. Metadata from the Alfresco Repository is retrieved using a direct JDBC connection to the Alfresco Database (nb. currently only PostgreSQL is supported).
+* *Reindexing*: Indexing the information of a pre-populated Alfresco Repository or catching up with Alfresco Repositories that have missed some ActiveMQ messages is provided by the Reindexing component. Metadata from the Alfresco Repository is retrieved using a direct JDBC connection to the Alfresco Database. **Note:** Only PostgreSQL is supported.
 
 > **Note:** Content and Permission reindexing is not supported.
 
@@ -132,7 +132,7 @@ In order to identify the services used for the different features provided by Al
 
 ### Metadata and Permissions
 
-Every time a node is created or updated in Content Repository, new messages with metadata and permissions are sent to ActiveMQ. Elasticsearch Connector is consuming these and send the indexing requests to Elasticsearch server.
+Every time a node is created or updated in Content Repository, new messages with metadata and permissions are sent to ActiveMQ. Elasticsearch Connector is consuming these and sends the indexing requests to Elasticsearch server.
 
 ### Content
 
