@@ -5,11 +5,13 @@ title: Overview
 **Administration Features**
 
 * Administration console to manage the key interactions between Alfresco and Elasticsearch from Alfresco Repository
-* Ability to determine the high-level health of the Elastic Search index via the administration console
+* Ability to determine the high-level health of the Elastic Search index via the administration console @martin where should these go?
+
+@martin What is the purpose of this page?
 
 ## Indexing
 
-### Pre-Indexing considerations
+### Preindexing
 
 The Exact term search feature is disabled by default to save index space. It's possible to enable it for specific properties and property types in the configuration `exactTermSearch.properties` file.
 
@@ -17,9 +19,11 @@ The Exact term search feature is disabled by default to save index space. It's p
 
 ### Alfresco Elasticsearch Connector
 
-**Indexing** is provided by a Spring Boot application called `Alfresco Elasticsearch Connector`. This application contains two main components that build and maintain the index in Elasticsearch:
+**Indexing** is provided by a Spring Boot application called Alfresco Elasticsearch Connector. This application contains two main components that build and maintain the index in Elasticsearch:
 
-* *Live Indexing*: Metadata, Content and Permissions from Alfresco Repository are consumed using ActiveMQ messages so they can be indexed in the Elasticsearch server. The information created and updated in Alfresco Repository is not immediately available in Elasticsearch, as it takes some time to process the messages coming from the Repository. The previous [Eventual consistency]({% link search-services/latest/install/index.md %}#eventual-consistency) approach, based on transactions and used for Solr deployments, has been replaced by this new approach based on ActiveMQ messages.
+* *Live Indexing:* Metadata, Content, and Permissions from Alfresco Repository are consumed using ActiveMQ messages so they can be indexed in the Elasticsearch server @martin do we need to call it that? Cant we just say Elasticsearch?. The information created and updated in Alfresco Repository is not immediately available in Elasticsearch because it takes some time to process the messages that come from the Repository. 
+
+**Note:** The previous [Eventual consistency]({% link search-services/latest/install/index.md %}#eventual-consistency) approach, based on transactions and used for Solr deployments, has been replaced by this new approach. @martin is Eventual consistency occuring with the new approach?
 
 * *Reindexing*: Indexing the information of a pre-populated Alfresco Repository or catching up with Alfresco Repositories that have missed some ActiveMQ messages is provided by the Reindexing component. Metadata from the Alfresco Repository is retrieved using a direct JDBC connection to the Alfresco Database. **Note:** Only PostgreSQL is supported.
 
@@ -27,11 +31,13 @@ The Exact term search feature is disabled by default to save index space. It's p
 
 ## New Repository
 
-When creating a new Alfresco Repository, use the `Alfresco Elasticsearch Connector` applications in the following sequence:
+When creating a new Alfresco Repository, use the Alfresco Elasticsearch Connector applications in the following order:
 
-* Start the ACS Stack, including the Alfresco Elasticsearch Connector Live Indexing services and Elasticsearch server
-* Configure Alfresco Elasticsearch Connector Reindexing app to point to the database and Elasticsearch server
-* Run the reindexing app from the command line replacing the connection details as appropriate:
+1. Start the Content Services Stack, including Alfresco Elasticsearch Connector Live Indexing services and Elasticsearch server.
+2. Configure Alfresco Elasticsearch Connector Reindexing app to point to the database and Elasticsearch server.
+3. Run the reindexing app from the command line and replace the connection details as appropriate:
+
+@martin where do they get the `alfresco-elasticsearch-reindexing-3.0.0-app.jar` form ? 
 
 ```java
 $ java -jar alfresco-elasticsearch-reindexing-3.0.0-app.jar \
@@ -50,12 +56,12 @@ Once the command has completed, metadata from the out-of-the-box Repository node
 
 ## Existing Repository
 
-When using a pre-populated Alfresco Repository, use the `Alfresco Elasticsearch Connector` applications in the following sequence:
+When using a pre-populated Alfresco Repository, use Alfresco Elasticsearch Connector applications in the following order:
 
-* Ensure the ACS Stack with SOLR (configured as the search subsystem) is running
-* Start the Elasticsearch server
-* Configure the Alfresco Elasticsearch Connector Reindexing app to point to the database and Elasticsearch server
-* Run the reindexing app replacing the connection details as appropriate:
+1. Ensure the Content Services Stack with SOLR, which is configured as the search subsystem, is running.
+2. Start the Elasticsearch server.
+3. Configure Alfresco Elasticsearch Connector Reindexing app to point to the database and Elasticsearch server.
+4. Run the reindexing app from the command line and replace the connection details as appropriate:
 
 ```java
 $ java -jar alfresco-elasticsearch-reindexing-3.0.0-app.jar \
@@ -69,7 +75,7 @@ o.a.r.w.ElasticsearchRepoEventItemWriter : Total indexed documents:: 80845
 o.a.r.listeners.JobLifecycleListener     : Current Status: COMPLETED
 ```
 
-Once the command is completed, metadata from any existing Repository nodes will be indexed in the Elasticsearch server. Change the Alfresco Repository configuration in order to use Elasticsearch as the search subsystem and then re-start the Repository.
+Once the command has completed, metadata from any existing Repository nodes will be indexed in the Elasticsearch server. Change the Alfresco Repository configuration in order to use Elasticsearch as the search subsystem and then re-start the Repository.
 
 ## Partial Indexing
 
