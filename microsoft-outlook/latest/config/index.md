@@ -556,7 +556,47 @@ See step **11** for the complete example of metadata settings.
 
     > **Note:** An exact match of the folder without a wildcard takes priority over the wildcard pattern.
 
-22. Save your changes and restart Microsoft Outlook.
+22. To configure a dependent picklist, use this example:
+
+    ```xml
+    <match pattern="/app:company_home/st:sites/cm:qa-ext-custom-metadata/cm:documentLibrary/cm:list-metadata" type="folder">
+        <target default="true" name="List Metadata" schemaId="81143a75">
+            <property allowedCategoryValues="cm:categoryRoot/cm:generalclassifiable/cm:Regionen/cm:EUROPA/cm:Nördliches_x0020_Europa" name="wpsmail-qa-ext:list-metadata-country-text">
+                <picklist targetProperty="wpsmail-qa-ext:list-metadata-language-text">
+                    <controllingField name="United Kingdom">
+                        <value name ="English"/>
+                        <value name ="Scottish"/>
+                        <value name ="Irish"/>
+                        <value name ="Welsh"/>
+                    </controllingField>
+                    <controllingField name="Germany">
+                        <value name ="German"/>
+                    </controllingField>
+                    <controllingField name="Spain">
+                        <value name ="Spanish"/>
+                    </controllingField>                    
+                </picklist>
+            </property>
+            <property name="wpsmail-qa-ext:list-metadata-languagetext" allowedCategoryValues="cm:categoryRoot/cm:generalclassifiable/cm:Languages" />
+         </target>
+    </match>
+    ```    
+    The `<picklist>` can be defined multiple times under the `<property>` tag (if a property controls more than one dependent drop-down box). In this example, the first defined property contains a picklist to control the second property. When selecting a value for the first property, the plugin will try to find a corresponding entry in the configuration and if it finds a match it will filter the second property to only show the specified values. If no match can be found, the second property will show all of its entries.
+    
+    As an example:
+    Drop-down box 1 contains the values:
+    * United Kingdom
+    * Germany
+    * Spain
+    
+    Drop-down box 2 contains the values
+    * English 
+    * German
+    * Spanish
+    
+    When selecting "Spain" in drop-down box 1, drop-down box 2 will only have the value "Spanish" for selection.
+
+23. Save your changes and restart Microsoft Outlook.
 
     The template changes are applied.
 
