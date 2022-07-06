@@ -581,20 +581,21 @@ See step **11** for the complete example of metadata settings.
          </target>
     </match>
     ```    
-    The `<picklist>` can be defined multiple times under the `<property>` tag (if a property controls more than one dependent drop-down box). In this example, the first defined property contains a picklist to control the second property. When selecting a value for the first property, the plugin will try to find a corresponding entry in the configuration and if it finds a match it will filter the second property to only show the specified values. If no match can be found, the second property will show all of its entries.
+  The `<picklist>` can be defined multiple times under the `<property>` tag (if a property is supposed to control more than one dependent drop-down box). In this example, the first defined property contains a picklist to control the second property. When selecting a value for the first property, the plugin will try to find a corresponding entry in the configuration (using the `<controllingField>`) and if it finds a match it will filter the second property to only show the specified values. If no matching `<controllingField>` can be found, the second property will show all of its entries.
     
     As an example:
     Drop-down box 1 contains the values:
     * United Kingdom
     * Germany
     * Spain
+    * France
     
     Drop-down box 2 contains the values
     * English 
     * German
     * Spanish
     
-    When selecting "Spain" in drop-down box 1, drop-down box 2 will only have the value "Spanish" for selection.
+    When selecting "Spain" in drop-down box 1, drop-down box 2 will only have the value "Spanish" for selection. When selecting "France", the second drop-down-box will show all available languages without filtering, because "France" is not configured as a `<controllingField>`.
 
 23. Save your changes and restart Microsoft Outlook.
 
