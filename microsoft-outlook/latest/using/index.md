@@ -131,7 +131,7 @@ Work with your files and folders using the Alfresco sidebar.
 
 1. Click the **Explore** tab from the **Alfresco Outlook Client** sidebar, or navigate through the list view.
 
-    ![]({% link microsoft-outlook/images/outlook-sidebar-annotated.png %})
+![ClientOverview - 2 9 2+](https://user-images.githubusercontent.com/42136472/191930073-f41345fd-60de-4396-864d-d0c9e83e0034.png)
 
     >**Note:** In Alfresco Outlook Integration 2.7, the **Explore** tab is only available if the **Workflow** tab is also enabled to save space for more content. The **Workflow** tab is hidden by default.
 
